@@ -1,0 +1,40 @@
+-- Members Table
+CREATE TABLE Members (
+    MemberID SERIAL PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    Phone VARCHAR(20),
+    Address VARCHAR(255),
+    JoinDate DATE
+);
+
+-- Books Table
+CREATE TABLE Books (
+    BookID SERIAL PRIMARY KEY,
+    Title VARCHAR(255),
+    Author VARCHAR(255),
+    Genre VARCHAR(50),
+    PublishedYear INTEGER,
+    TotalCopies INTEGER,
+    AvailableCopies INTEGER
+);
+
+-- Staff Table
+CREATE TABLE Staff (
+    StaffID SERIAL PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Position VARCHAR(50),
+    HireDate DATE
+);
+
+-- Borrowing Table
+CREATE TABLE Borrowing (
+    BorrowID SERIAL PRIMARY KEY,
+    MemberID INTEGER REFERENCES Members(MemberID),
+    BookID INTEGER REFERENCES Books(BookID),
+    BorrowDate DATE,
+    ReturnDate DATE,
+    Status VARCHAR(20)
+);

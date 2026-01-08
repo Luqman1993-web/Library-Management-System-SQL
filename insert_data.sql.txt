@@ -1,0 +1,27 @@
+-- ============================
+-- INSERT DATA INTO TABLES
+-- ============================
+
+-- Members
+COPY Members(MemberID, FirstName, LastName, Email, Phone, Address, JoinDate)
+FROM 'C:/Users/HP/Desktop/LMS/csv_files/Members.csv'
+DELIMITER ','
+CSV HEADER;
+
+-- Books
+COPY Books(BookID, Title, Author, Genre, PublishedYear, TotalCopies, AvailableCopies)
+FROM 'C:/Users/HP/Desktop/LMS/csv_files/Books.csv'
+DELIMITER ','
+CSV HEADER;
+
+-- Staff
+COPY Staff(StaffID, FirstName, LastName, Position, HireDate)
+FROM 'C:/Users/HP/Desktop/LMS/csv_files/Staff.csv'
+DELIMITER ','
+CSV HEADER;
+
+-- Borrowing
+COPY Borrowing(BorrowID, MemberID, BookID, BorrowDate, ReturnDate, Status)
+FROM 'C:/Users/HP/Desktop/LMS/csv_files/Borrowing.csv'
+DELIMITER ','
+CSV HEADER;

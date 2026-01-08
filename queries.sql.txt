@@ -1,0 +1,72 @@
+-- ==========================================
+-- Library Management System – Resume SQL Queries
+-- ==========================================
+
+-- =========================
+-- Question 1: Top 10 Most Borrowed Books
+-- =========================
+SELECT 
+    bo.BookID,
+    bo.Title,
+    COUNT(b.BorrowID) AS TotalTimesBorrowed
+FROM Books bo
+JOIN Borrowing b ON b.BookID = bo.BookID
+GROUP BY bo.BookID, bo.Title
+ORDER BY TotalTimesBorrowed DESC
+LIMIT 10;
+
+-- =========================
+-- Question 2: Members With More Than 5 Late Returns
+-- =========================
+-- If all returns are late
+SELECT 
+    m.MemberID,
+    m.FirstName || ' ' || m.LastName AS FullName,
+    COUNT(b.BorrowID) AS LateReturnCount
+FROM Members m
+JOIN Borrowing b ON b.MemberID = m.MemberID
+WHERE b.ReturnDate IS NOT NULL
+GROUP BY m.MemberID, m.FirstName, m.LastName
+HAVING COUNT(b.BorrowID) > 5
+ORDER BY LateReturnCount DESC;
+
+-- =========================
+-- Question 3: Current Books on Loan
+-- =========================
+SELECT 
+    b.BorrowID,
+    m.FirstName || ' ' || m.LastName AS MemberName,
+    bo.Title AS BookTitle,
+    b.BorrowDate,
+    b.DueDate
+FROM Borrowing b
+JOIN Members m ON b.MemberID = m.MemberID
+JOIN Books bo ON b.BookID = bo.BookID
+WHERE b.ReturnDate IS NULL
+ORDER BY b.BorrowDate;
+
+-- =========================
+-- Question 4: Most Borrowed Genres (Window Function)
+-- =========================
+SELECT
+    bo.Genre,
+    COUNT(b.BorrowID) AS TotalBorrowed,
+    DENSE_RANK() OVER (ORDER BY COUNT(b.BorrowID) DESC) AS RankByBorrowCount
+FROM Books bo
+JOIN Borrowing b ON bo.BookID = b.BookID
+GROUP BY bo.Genre
+ORDER BY RankByBorrowCount;
+
+-- =========================
+-- Question 5: Top 10 Most Active Members
+-- =========================
+SELECT 
+    m.MemberID,
+    m.FirstName || ' ' || m.LastName AS FullName,
+    COUNT(b.BorrowID) AS TotalBorrowed,
+    MAX(b.BorrowDate) AS LastBorrowDate
+FROM Members m
+JOIN Borrowing b ON b.MemberID = m.MemberID
+GROUP BY m.MemberID, m.FirstName, m.LastName
+ORDER BY TotalBorrowed DESC
+LIMIT 10;
